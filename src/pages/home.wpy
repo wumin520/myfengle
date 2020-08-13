@@ -1,0 +1,62 @@
+<template>
+    <div class="page_">
+        <div @tap="handleTest">
+            <img v-show="!visible" mode="widthFix" src="/static/img/1.jpg"/>
+            <img @tap="visible=!visible" v-show="visible" mode="widthFix" src="/static/img/2.jpg"/>
+        </div>
+        <button @tap="handleShowPopop" class="btn_"></button>
+        <button v-if="visible" open-type="contact" class="btn_ btn_share_"></button>
+    </div>
+</template>
+
+<style lang="scss" scoped>
+    .page_ {
+        position: relative;
+        image {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .img_wrap_ {
+            width: 200px;
+        }
+        .btn_ {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 50px;
+            bottom: 26px;
+            background: inherit;
+            border: none;
+            &::after {
+                border: none;
+            }
+        }
+        .btn_share_ {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 226px;
+        }
+    }
+</style>
+
+<script>
+    import wepy from "@wepy/core";
+    wepy.page({
+        data: {
+            visible: false
+        },
+        methods: {
+            handleTest () {
+                wx.navigateTo({
+                    url: '/pages/webview'
+                })
+            },
+            handleShowPopop () {
+                console.log('1')
+                this.visible = true
+            }
+        }
+    })
+</script>

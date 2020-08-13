@@ -1,0 +1,3 @@
+<template>
+    <web-view src="http://mall.run4wd.com/m/bs/productPromote"></web-view>
+</template>
