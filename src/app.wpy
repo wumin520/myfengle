@@ -56,7 +56,6 @@ wepy.app({
 {
     pages: [
       'pages/home',
-      'pages/webview'
     ],
     window: {
       backgroundTextStyle: 'light',

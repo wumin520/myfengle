@@ -1,8 +1,8 @@
 <template>
     <div class="page_">
-        <div @tap="handleTest">
-            <img v-show="!visible" mode="widthFix" src="/static/img/1.jpg"/>
-            <img @tap="visible=!visible" v-show="visible" mode="widthFix" src="/static/img/2.jpg"/>
+        <div>
+            <img v-if="!visible" mode="widthFix" src="/static/img/1.jpg"/>
+            <img @tap="visible=!visible" v-if="visible" mode="widthFix" src="/static/img/2.jpg"/>
         </div>
         <button @tap="handleShowPopop" class="btn_"></button>
         <button v-if="visible" open-type="contact" class="btn_ btn_share_"></button>
@@ -56,6 +56,12 @@
             handleShowPopop () {
                 console.log('1')
                 this.visible = true
+            }
+        },
+        onShareAppMessage () {
+            return {
+                title: '服务管家',
+                path: '/pages/home'
             }
         }
     })
