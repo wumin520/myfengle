@@ -7,13 +7,33 @@
   justify-content: space-between;
   box-sizing: border-box;
 }
+page {
+  min-height: 100%;
+}
+.page_ {
+  min-height: 100vh;
+}
 </style>
 
 <script>
 import wepy from '@wepy/core';
 import eventHub from './common/eventHub';
+import MyPlugin from './plugins/common';
+import sensors from 'sa-sdk-miniprogram';
 
-
+wepy.use(MyPlugin);
+sensors.setPara({
+	name: 'sensors',
+	server_url: '您的数据接收地址',
+	// 全埋点控制开关
+	autoTrack: {},
+	// 自定义渠道追踪参数，如source_channel: ["custom_param"]
+	source_channel: [],
+	// 是否允许控制台打印查看埋点数据(建议开启查看)
+	show_log: true,
+	// 是否允许修改 onShareAppMessage 里 return 的 path，用来增加(登录 ID，分享层级，当前的 path)，在 app onShow 中自动获取这些参数来查看具体分享来源、层级等
+	allow_amend_share_path: true
+});
 wepy.app({
   hooks: {
     // App 级别 hook，对整个 App 生效
@@ -55,13 +75,37 @@ wepy.app({
 <config>
 {
     pages: [
+      'pages/index',
       'pages/home',
+      'pages/detail',
+      'pages/search',
+      'pages/my',
+      'pages/mxtHome',
+      'pages/login'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'my蜂乐',
-      navigationBarTextStyle: 'black'
-    }
+      navigationBarTextStyle: 'black',
+      navigationStyle: 'custom'
+    },
+  "tabBar": {
+    "custom": true,
+    "color": "black",
+    "selectedColor": "black",
+    "backgroundColor": "#fff",
+    "list": [{
+      "pagePath": "pages/mxtHome",
+      "text": "首页"
+    }, {
+      "pagePath": "pages/index",
+      "text": "学习"
+    }, {
+      "pagePath": "pages/my",
+      "text": "我的"
+    }]
+  },
+  "usingComponents": {}
 }
 </config>

@@ -1,0 +1,174 @@
+<template>
+    <div class="audio_wrap_">
+        <view class="progress">
+          <text>{{progressText}}</text>
+          <slider class="bar" bindchange="sliderChange" bindchanging="sliderChanging" value="{{progress}}" step="1" min="0" max="{{duration}}" activeColor="#1aad19" block-size="12" block-color="#1aad19" />
+          <text>{{durationText}}</text>
+        </view>
+        <view class="buttons">
+          <!-- <image class='button' bindtap='lastMusic' src='/static/img/audio/last.png'></image> -->
+          <image class="button" bindtap="playOrpause" src="{{playStatus?'/static/img/audio/pause.png':'/static/img/audio/play.png'}}"></image>
+          <!-- <image class='button' bindtap='nextMusic' src='/static/img/audio/next.png'></image> -->
+        </view>
+    </div>
+</template>
+<style lang="less" scoped>
+.audio_wrap_ {
+    padding: 30rpx;
+}
+.progress {
+  display: flex;
+  align-items: center;
+  font-size: 10pt;
+  color: rgb(87, 49, 49);
+  text-align: center;
+}
+
+.progress .bar {
+  flex: 1;
+}
+
+.progress text {
+  flex-basis: 90rpx;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.buttons .button {
+  width: 70rpx;
+  height: 70rpx;
+}
+</style>
+<script>
+import wepy from '@wepy/core';
+
+wepy.component({
+    props: {
+        source: {
+            type: Object,
+            default: {}
+        }
+    },
+    data: {
+        progressText: '',
+        durationText: '',
+        duration: 0,
+        progress: 0,
+        playStatus: false
+    },
+    watch: {
+        source () {
+            console.log('watch source -> ', this.source)
+            this.playMusic()
+        }
+    },
+    onUnload () {
+        console.log('onUnload -> ', 1)
+        this.manager.pause();
+        clearInterval(this._st);
+    },
+    created () {
+    },
+    methods: {
+        //播放按钮
+        playOrpause: function() {
+          let manager = wx.getBackgroundAudioManager();
+          if (!manager.src) {
+            manager.src = this.source.src;
+          }
+          
+          if (this.playStatus) {
+            manager.pause();
+          } else if (this._done) {
+            this._done = false;
+            this.playMusic();
+          } else {
+            manager.play();
+          }
+        },
+        playMusic: function() {
+          let audio = this.source;
+          let manager = wx.getBackgroundAudioManager();
+          this.manager = manager;
+          manager.title = audio.name || "音频标题";
+          manager.epname = audio.epname || "专辑名称";
+          manager.singer = audio.author || "歌手名";
+          manager.coverImgUrl = audio.poster;
+          // 设置了 src 之后会自动播放
+          manager.currentTime = 0;
+          manager.pause();
+          let that = this;
+          manager.onPlay(() => {
+            this.playStatus = true;
+            this.countTimeDown();
+          });
+          manager.onPause(() => {
+            this.playStatus = false;
+          });
+          manager.onEnded(() => {
+            this._done = true;
+            this.$emit('ended');
+            this.playStatus = false;
+          });
+          manager.onTimeUpdate(() => {
+          })
+        },
+        //格式化时长
+        formatTime: function(s) {
+          let t = '';
+          s = Math.floor(s);
+          if (s > -1) {
+            let min = Math.floor(s / 60) % 60;
+            let sec = s % 60;
+            if (min < 10) {
+              t += "0";
+            }
+            t += min + ":";
+            if (sec < 10) {
+              t += "0";
+            }
+            t += sec;
+          }
+          return t;
+        },
+        //循环计时
+        countTimeDown: function() {
+          if (this._st) {
+            clearInterval(this._st);
+            this._st = null
+          }
+          this._st = setInterval(() => {
+              const manager = this.manager;
+              let progress = Math.ceil(manager.currentTime);
+              const duration = Math.ceil(manager.duration);
+              if (!this.playStatus && this._st) {
+                clearInterval(this._st);
+                this._st = null
+              }
+              console.log('play -> setInterval -> ', progress, duration)
+              this.progress = progress;
+              this.progressText = this.formatTime(progress);
+
+              this.duration = duration;
+              this.durationText = this.formatTime(duration);
+          }, 1000)
+          console.log('countTimeDown -> ', this._st)
+        },
+        //拖动事件
+        sliderChange: function(e) {
+          const detail = e.$wx.detail;
+          let manager = wx.getBackgroundAudioManager();
+          // manager.pause();
+          manager.seek(detail.value);
+          this.progressText = this.formatTime(detail.value);
+          // setTimeout(function() {
+          //   manager.play();
+          // }, 1000);
+        },
+    }
+})
+</script>

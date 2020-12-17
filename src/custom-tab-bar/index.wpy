@@ -1,0 +1,85 @@
+<template>
+<div class="tabbar_wrap_">
+    <div class="tabbar_">
+        <div @click="handleChange(item, index)" v-for="(item, index) in list" class="{{selectedIndex == index + 1 ? 'selected_': ''}}">
+            <image src="{{selectedIndex == index + 1 ? item.selectedImg : item.img}}" class="img_ a_"></image>
+            {{item.title}}
+        </div>
+    </div>
+</div>
+</template>
+<style lang="less" scoped>
+.tabbar_wrap_ {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 34rpx 29rpx 29rpx 29rpx;
+    background: #fff;
+}
+.tabbar_ {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    padding: 22rpx 75rpx;
+    background: #FAFAFA;
+    border-radius: 35px;
+    font-size: 21rpx;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: #D8D8D8;
+    .selected_ {
+        color: #E5C27D;
+    }
+    .img_ {
+        display: block;
+        &.a_ {
+            width: 41rpx;
+            height: 43rpx;
+        }
+        &.b_ {
+            width: 34rpx;
+            height: 42rpx;
+        }
+        &.c_ {
+            width: 38rpx;
+            height: 46rpx;
+        }
+    }
+}
+</style>
+<script>
+import wepy from '@wepy/core';
+const prePath = '/static/img/tabbar/';
+
+wepy.component({
+    data: {
+        selectedIndex: 2,
+        list: [{
+            img: prePath + '1.png',
+            selectedImg: prePath + '2.png',
+            title: '首页',
+            url: '/pages/mxtHome'
+        }, {
+            img: prePath + '3.png',
+            selectedImg: prePath + '4.png',
+            title: '学习',
+            url: '/pages/index'
+        }, {
+            img: prePath + '5.png',
+            selectedImg: prePath + '6.png',
+            title: '我的',
+            url: '/pages/my'
+        }]
+    },
+    created () {
+    },
+    methods: {
+        handleChange (item, index) {
+            wx.switchTab({
+                url: item.url
+            })
+        }
+    },
+})
+</script>

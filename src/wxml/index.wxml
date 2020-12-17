@@ -1,0 +1,6 @@
+<template name="audio">
+<view class="audio_wrap_">
+    <audio poster="{{poster}}" name="{{name}}" author="{{author}}" src="{{src}}" id="myAudio" controls>
+    </audio>
+</view>
+</template>

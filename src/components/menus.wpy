@@ -1,0 +1,74 @@
+<template>
+    <scroll-view scroll-x scroll-with-animation>
+        <ul class="menus_wrap_">
+            <li @click="handleChange(item, index)" v-for="(item, index) in list" class="{{index + 1 == activeIndex ? 'item_ active_' : 'item_'}}">{{item.name}}</li>
+        </ul>
+    </scroll-view>
+</template>
+<style lang="less" scoped>
+    .menus_wrap_ {
+        padding: 26rpx 60px 46rpx 28rpx;
+        font-size: 28rpx;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #999999;
+        display: flex;
+        justify-content: space-between;
+        justify-items: center;
+        white-space: nowrap;
+        // overflow: scroll;
+        .item_ {
+            margin-right: 36rpx;
+            text-align: center;
+            &:first-child {
+                margin-left: 6rpx;
+            }
+        }
+        .active_ {
+            font-size: 33rpx;
+            font-family: PingFang SC;
+            font-weight: 500;
+            color: #BC8C52;
+            position: relative;
+            &::after {
+                position: absolute;
+                bottom: -16rpx;
+                left: 50%;
+                margin-left: -21rpx;
+                display: inline-block;
+                content: '';
+                width: 36rpx;
+                height: 36rpx;
+                border-top: 6rpx solid transparent;
+                border-left: 6rpx solid transparent;
+                border-bottom: 6rpx solid #BC8C52;
+                border-right: 6rpx solid transparent;
+                border-radius: 50%;
+            }
+        }
+    }
+</style>
+<script>
+import wepy from '@wepy/core';
+
+wepy.component({
+    props: {
+        list: {
+            type: Array,
+            default: []
+        },
+        activeIndex: {
+            type: Number,
+            default: 1
+        }
+    },
+    data: {
+    },
+    methods: {
+        handleChange (item, index) {
+            this.activeIndex = index + 1;
+            this.$emit('change', item.value, index, item);
+        }
+    }
+})
+</script>

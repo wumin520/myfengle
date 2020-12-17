@@ -3586,6 +3586,10 @@ rxjs@^5.5.2:
   dependencies:
     symbol-observable "1.0.1"
 
+sa-sdk-miniprogram@^1.14.2:
+  version "1.14.2"
+  resolved "https://registry.npm.taobao.org/sa-sdk-miniprogram/download/sa-sdk-miniprogram-1.14.2.tgz#17c04d87ba9ceef0dc45d4779dc80f6f2ea0ac8f"
+
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.npm.taobao.org/safe-buffer/download/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"

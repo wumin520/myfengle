@@ -17,7 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "@wepy/core": "^2.0.0-alpha.16",
-    "miniprogram-slide-view": "0.0.3"
+    "miniprogram-slide-view": "0.0.3",
+    "sa-sdk-miniprogram": "^1.14.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",

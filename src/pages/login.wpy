@@ -1,0 +1,211 @@
+<template>
+    <div>
+        <topNavBar extraClass="only"></topNavBar>
+        <div>
+            <image src="/static/img/10.png" class="img_"></image>
+        </div>
+        <div class="form_">
+            <div>
+                <input v-model="loginName" class="input_" type="text" placeholder="请输入MY客蜂账号/手机号" placeholder-class="placeholder"
+                maxlength="140">
+            </div>
+            <div>
+                <input v-model="code" @input="handleCodeChange" @blur="handleCheckCode" class="input_" type="{{loginType ? 'text' : 'password'}}" :placeholder="placeholder" placeholder-class="placeholder ph_yzm_"
+                maxlength="140">
+            </div>
+            <div>
+                <button v-if="!wxAuthed" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" class="btn_">
+                    {{btnText}}
+                </button>
+                <button v-else :disabled="count" @click="handleSubmit" class="btn_">
+                    {{btnText}}
+                </button>
+            </div>
+            <div @click="handleToggleLogin" class="account_">
+                {{loginType ? '账号登录' : '验证码登录'}}
+            </div>
+        </div>
+    </div>
+</template>
+<style lang="scss" scoped>
+    .account_ {
+        font-size: 24rpx;
+        font-family: Source Han Sans SC;
+        font-weight: 500;
+        color: #282828;
+        text-align: center;
+        margin-top: 68rpx;
+    }
+    .img_ {
+        margin: 60px auto 47rpx;
+        width: 113rpx;
+        height: 113rpx;
+        display: block;
+    }
+    .form_ {
+        margin: 0px 78rpx;
+    }
+    .input_ {
+        height: 113rpx;
+        background: #F6F6F6;
+        border-radius: 53px;
+        padding: 0 60rpx;
+        margin-bottom: 34rpx;
+    }
+    .placeholder {
+        font-size: 31rpx;
+        font-family: Source Han Sans SC;
+        font-weight: 400;
+        color: #BBBBBB;
+        text-align: center;
+        // &.ph_yzm_ {
+        //     margin-left: 108rpx;
+        // }
+    }
+    .btn_ {
+        margin-top: 113rpx;
+        height: 113rpx;
+        line-height: 113rpx;
+        background: linear-gradient(180deg, #F9D89F, #EFC67C);
+        border-radius: 53rpx;
+        font-size: 31rpx;
+        font-family: Source Han Sans SC;
+        font-weight: 500;
+        color: #282828;
+        border: none;
+        &::after {
+            border: none;
+        }
+    }
+</style>
+<script>
+import wepy from '@wepy/core';
+import api from '@/utils/api';
+import { firstAuth } from '@/utils/autoLogin';
+import { KEY_IS_LOGIN, USER_ID } from '@/utils/constant'
+
+const KEY_USER_INFO = 'user_info';
+const wxAuthed = wx.getStorageSync(KEY_USER_INFO) ? true : false;
+
+wepy.page({
+    data: {
+        loginName: '',
+        code: '',
+        count: 0,
+        codeValid: false,
+        wxAuthed,
+        loginType: true
+    },
+    computed: {
+        placeholder () {
+            return this.loginType ? '请输入验证码' : '请输入密码'
+        },
+        btnText () {
+            return !this.loginType ? '登录': this.codeValid ? '登录' : this.count ? `倒计时${this.count}S` : '获取验证码' 
+        }
+    },
+    created () {
+
+    },
+    methods: {
+        firstAuth,
+        handleCodeChange (e) {
+            this._st && clearTimeout(this._st);
+            this._st = null
+            const code = e.$wx.detail.value;
+            if (code.length == 4) {
+                this._st = setTimeout(() => {
+                    this.handleCheckCode()
+                }, 2000);
+            }
+        },
+        handleToggleLogin () {
+            this.loginType = !this.loginType;
+            this.code = '';
+            this.codeValid = false;
+        },
+        bindGetUserInfo(e) {
+          const { detail } = e.$wx;
+          if (detail.errMsg === 'getUserInfo:ok') {
+            this.firstAuth().then(() => {
+                this.wxAuthed = true;
+                wx.setStorageSync(KEY_USER_INFO, detail.userInfo);
+                this.handleSubmit();
+            });
+          }
+        },
+        handleCheckCode () {
+            if (!this.code || !this.loginType) {
+                return
+            }
+            api.checkCode({
+                loginName: this.loginName,
+                verificationCode: this.code
+            }).then(res => res.data).then(data => {
+                this.count = 0;
+                this.codeValid = true;
+                clearInterval(this._si);
+            })
+        },
+        handleSubmit () {
+            // 验证码登录
+            if ((this.codeValid && this.loginType) || !this.loginType) {
+                const openId = wx.getStorageSync('openId');
+                sensors.setOpenid(res.OpenID);
+                sensors.init(); // 神策初始化
+                let params = {
+                    loginName: this.loginName,
+                    loginPwd: this.code,
+                    opentId: openId
+                }
+                // 验证码登录
+                if (this.loginType) {
+                    params.loginFlag = '1'
+                }
+                api.login({
+                    ...params
+                }).then(res => res.data).then(data => {
+                    sensors.login(data.content);
+                    wx.setStorageSync(USER_ID, data.content);
+                    wx.setStorageSync(KEY_IS_LOGIN, 1);
+                    wx.showToast({
+                      title: '登录成功', //提示的内容,
+                      icon: 'none', //图标,
+                    });
+                    wx.navigateBack({
+                      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                    })
+                })
+                return
+            }
+            if (/1\d{10}/.test(this.loginName)) {
+
+            }
+            api.sendCode({
+                loginName: this.loginName
+            }).then(res => res.data).then(data => {
+                this.countTime()
+            })
+        },
+        countTime () {
+            let time = 60;
+
+            this._si = setInterval(() => {
+                time--
+                this.count = time;
+                if (time < 1) {
+                    clearInterval(si);
+                }
+            }, 1000);
+        }
+    }
+})
+</script>
+<config>
+{
+  "navigationBarTitleText": "wepy",
+  "usingComponents": {
+    topNavBar: '~@/components/topNavBar'
+  }
+}
+</config>

@@ -1,0 +1,139 @@
+<template>
+    <div class="page_">
+        <topNavBar></topNavBar>
+        <div class="search_wrap_">
+            <input @input="handleSearch" value="{{searchText}}" type="text" placeholder="寿险应该这样卖！" placeholder-class="placeholder" maxlength="140">
+        </div>
+        <div class="title_">
+            热门搜索：
+        </div>
+        <ul class="list_">
+            <li v-for="(item, index) in courseList" class="item_">
+                <navigator url="detail?id={{item.id}}" open-type="navigate" hover-class="none">
+                    <label class="index_">{{index + 1}}</label> {{item.title}} 
+                    <label class="num_">{{item.peoples}}</label>
+                </navigator>
+            </li>
+        </ul>
+    </div>
+</template>
+<style lang="less" scoped>
+.page_ {
+    .search_wrap_ {
+        padding: 0 28rpx 12rpx;
+        input {
+            box-sizing: border-box;
+            height: 59rpx;
+            background: #FAFAFA;
+            border-radius: 29rpx;
+            padding-left: 36rpx;
+        }
+        .placeholder {
+            line-height: 23rpx;
+            font-size: 25rpx;
+            font-family: PingFang SC;
+            font-weight: 400;
+            color: #B9B9B9;
+        }
+    }
+    .title_ {
+        padding-left: 27rpx;
+        border-top: 1px solid #FAFAFA;
+        border-bottom: 1px solid #FAFAFA;
+        border-radius: 4rpx 0px 0px 0px;
+        line-height: 95rpx;
+        font-size: 33rpx;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #282828;
+    }
+    .list_ {
+        .item_ {
+            line-height: 98rpx;
+            border-bottom: 1px solid #F3F3F3;
+            font-size: 33rpx;
+            font-family: PingFang SC;
+            font-weight: 400;
+            color: #282828;
+            overflow: hidden;
+
+            label {
+                margin: 0 41rpx;
+                &.index_ {
+                    font-size: 33rpx;
+                    font-family: PingFang SC;
+                    font-weight: 600;
+                    color: #BC8C52;
+                }
+                &.num_ {
+                    margin-left: 33rpx;
+                    font-size: 25rpx;
+                    font-family: PingFang SC;
+                    font-weight: 400;
+                    color: #282828;
+                    float: right;
+                }
+            }
+        }
+    }
+}
+</style>
+<script>
+import wepy from '@wepy/core';
+import api from '@/utils/api';
+
+wepy.page({
+    data: {
+        courseList: [],
+        searchText: ''
+    },
+    onLoad (query) {
+        const { content } = query;
+        this.searchText = decodeURIComponent(content || '');
+        this.queryMySchoolCourse({
+            title: this.searchText
+        })
+    },
+    methods: {
+        handleSearch (e) {
+            if (this._st) {
+                clearTimeout(this._st);
+                this._st = null
+            }
+            this._st = setTimeout(() => {
+                this.courseList = []
+                this.queryMySchoolCourse({
+                    title: e.$wx.detail.value,
+                    tutorName: ''
+                })
+                this.queryMySchoolCourse({
+                    tutorName: e.$wx.detail.value
+                })
+            }, 1000);
+        },
+        queryMySchoolCourse (params = {}) {
+            api.queryMySchoolCourse(params).then(res => res.data).then(data => {
+                const result = data.content.map(item => {
+                    return {
+                        id: item.id,
+                        title: item.title,
+                        subTitle: item.tutorName,
+                        peoples: item.studiedNumber,
+                        number: item.videoNumber,
+                        img: item.videoCoverUrl
+                    }
+                })
+                this.courseList = this.courseList.concat(result)
+            })
+        }
+    }
+})
+</script>
+<config>
+{
+  "navigationBarTitleText": "wepy",
+  "usingComponents": {
+    topNavBar: '~@/components/topNavBar'
+  }
+}
+</config>

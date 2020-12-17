@@ -1,0 +1,101 @@
+<template>
+<div style="padding-top: {{statusBarHeight}}px;" class="patch_">
+    <div style="padding-top: {{statusBarHeight}}px;" class="h_ nav_header_ {{extraClass}}">
+        <div class="nav_wrap_">
+            <image @click="jumpTo(-1)" src="/static/img/5.png" class="left_"></image>
+            <div class="v_line_"></div>
+            <image @click="jumpTo(-1)" src="/static/img/6.png" class="home_"></image>
+        </div>
+    </div>
+</div>
+</template>
+<style lang="less" scoped>
+    .patch_ {
+        height: 46px;
+    }
+    .place_ {
+    }
+    .nav_header_ {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        padding: 0 28rpx 21rpx;
+        z-index: 66;
+        &.only {
+            .nav_wrap_ {
+                justify-content: flex-start;
+                border: none;
+                padding: 0;
+                padding-left: 24rpx;
+            }
+            .v_line_, .home_ {
+                display: none;
+            }
+        }
+        .nav_wrap_ {
+            background: #FFFFFF;
+            border: 1rpx solid #EEEEEE;
+            border-radius: 32rpx;
+            margin-top: 10rpx;
+            width: 169rpx;
+            padding-right: 18rpx;
+            box-sizing: border-box;
+            height: 64rpx;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            .v_line_ {
+                width: 1rpx;
+                height: 33rpx;
+                background: #C9C9C9;
+            }
+        }
+        .home_ {
+            width: 29rpx;
+            height: 31rpx;
+            padding-left: 5rpx;
+        }
+        .left_ {
+            padding: 18rpx 6rpx 18rpx 18rpx;
+            width: 17rpx;
+            height: 30rpx;
+        }
+    }
+</style>
+<script>
+import wepy from '@wepy/core';
+
+let systemInfo = wx.getSystemInfoSync();
+const statusBarHeight = systemInfo.statusBarHeight;
+
+console.log(statusBarHeight, 'statusBarHeight');
+wepy.component({
+    props: {
+        extraClass: {
+            type: String,
+            default: ''
+        }
+    },
+    data: {
+        statusBarHeight
+    },
+    created () {
+        console.log('this -> ', this)
+    },
+    methods: {
+        jumpTo (url) {
+            const curPages = getCurrentPages();
+            console.log(curPages)
+            if (url == -1 && curPages.length > 1) {
+                this.$parent.$back(-1)
+                return
+            } else {
+                url = 'index';
+                wx.switchTab({ url });
+            }
+        },
+    }
+})
+</script>
