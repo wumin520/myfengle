@@ -1,3 +1,15 @@
 <template>
-    <web-view src="http://mall.run4wd.com/m/bs/productPromote"></web-view>
+    <web-view bindmessage="bindmessage" src="https://cps.ssish.com/m/newbee/list?userId=41069"></web-view>
 </template>
+<script>
+import wepy from '@wepy/core';
+
+wepy.page({
+    methods: {
+        bindmessage (e) {
+            console.log('bindmessage -> ', e.detail)
+            wepy.setStorageSync('posterUrl', JSON.stringify(e.detail.data[0]));
+        }
+    }
+})
+</script>

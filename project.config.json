@@ -1,7 +1,7 @@
 {
 	"description": "A WePY project",
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": false,
 		"postcss": false,
 		"preloadBackgroundData": false,
@@ -52,8 +52,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/detail",
-					"pathName": "pages/detail",
+					"name": "pages/webview",
+					"pathName": "pages/webview",
 					"query": "id=37",
 					"scene": null
 				},
@@ -76,6 +76,13 @@
 					"name": "pages/login",
 					"pathName": "pages/login",
 					"query": "id=19",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "pages/downloadImg",
+					"pathName": "pages/downloadImg",
+					"query": "url=https%3A%2F%2Fssish.oss-cn-hangzhou.aliyuncs.com%2FnewBee%2Fmyschool%2F1610007531911.png",
 					"scene": null
 				}
 			]

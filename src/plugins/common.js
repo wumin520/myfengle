@@ -22,6 +22,14 @@ MyPlugin.install = function (wepy, options) {
         statusBarHeight
     },
     methods: {
+        startTrack (sensors) {
+          sensors = sensors || getApp().sensors;
+          const openId = wx.getStorageSync('openId');
+          if (openId) {
+            sensors.setOpenid(openId);
+            sensors.init(); // 神策初始化
+          }
+        },
         trackEvent (params) {
             const [section_name, module_name, module_element_name] = params;
             getApp().sensors.track('newbees_applets_click',{
