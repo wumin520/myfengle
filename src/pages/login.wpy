@@ -104,6 +104,8 @@ wepy.page({
             return !this.loginType ? '登录': this.codeValid ? '登录' : this.count ? `倒计时${this.count}S` : '获取验证码' 
         }
     },
+    onLoad () {
+    },
     created () {
 
     },
@@ -151,8 +153,7 @@ wepy.page({
             // 验证码登录
             if ((this.codeValid && this.loginType) || !this.loginType) {
                 const openId = wx.getStorageSync('openId');
-                sensors.setOpenid(res.OpenID);
-                sensors.init(); // 神策初始化
+                this.startTrack();
                 let params = {
                     loginName: this.loginName,
                     loginPwd: this.code,
@@ -165,7 +166,10 @@ wepy.page({
                 api.login({
                     ...params
                 }).then(res => res.data).then(data => {
-                    sensors.login(data.content);
+                    try {
+                        getApp().sensors.login(data.content);
+                    } catch (error) {
+                    }
                     wx.setStorageSync(USER_ID, data.content);
                     wx.setStorageSync(KEY_IS_LOGIN, 1);
                     wx.showToast({

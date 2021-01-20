@@ -2,8 +2,8 @@
     <div class="page_">
         <topNavBar></topNavBar>
         <div>
-            <video v-if="detailInfo.courseType == 1&&videoUrl" src="{{videoUrl}}" controls="true" objectFit="contain" @pause="pause"
-              @waiting="waiting" @error="error" @ended="handleVideoEnded">
+            <video id="myVideo" v-if="detailInfo.courseType == 1&&videoUrl" src="{{videoUrl}}" controls="true" objectFit="contain" @pause="pause"
+              @waiting="waiting" @play="handlePlay" @error="error" @ended="handleVideoEnded">
             </video>
             <div v-else-if="detailInfo.courseType == 2&&videoUrl">
                 <customAudio @ended="handleVideoEnded" :source="medioInfo"></customAudio>
@@ -377,7 +377,11 @@ wepy.page({
         curPages = getCurrentPages();
     },
     methods: {
-
+        handlePlay () {
+            if (!this.isLogined()) {
+                this.videoContext.pause();
+            }
+        },
         handleVideoEnded () {
             this.finishViewVideo({
                 cuswebuserid: this.userId,
@@ -503,17 +507,22 @@ wepy.page({
             }
 
         },
-        handleCourseChange (item) {
+        isLogined () {
             if (!wx.getStorageSync(KEY_IS_LOGIN)) {
                 wx.showToast({
-                  title: '请先登录',
-                  icon: 'none',
-                  duration: 3000
+                    title: '请先登录',
+                    icon: 'none',
+                    duration: 3000
                 });
-                this.$navigate('login')
-                return
+                this.$navigate('login');
+                return false
             }
-            this.playCourse(item);
+            return true;
+        },
+        handleCourseChange (item) {
+            if (this.isLogined()) {
+                this.playCourse(item);
+            }
         },
         queryMySchoolCourseById (id) {
             return api.queryMySchoolCourseById(id).then(res => res.data).then(data => {

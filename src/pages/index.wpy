@@ -13,6 +13,10 @@
                 </swiper-item>
             </block>
         </swiper>
+        <official-account v-if="!hideOA" bindload="bindOaLoad" binderror="bindErrorLoad" class="oa_wrap_">
+            <div>1</div>
+        </official-account>
+
         <!-- <swiper class="messages_" autoplay circular vertical="true">
             <block wx:for="{{items}}" wx:key="index">
                 <swiper-item>
@@ -83,6 +87,11 @@
             height: 100rpx;
         }
     }
+    .oa_wrap_ {
+        display: block;
+        width: 100%;
+        height: 168rpx;
+    }
 }
 .nav_header_ {
     height: 90rpx;
@@ -137,7 +146,8 @@ wepy.page({
         }, {
             name: '销售技巧',
             value: 4
-        }] // 课程标签：1-产品详解 2-专业知识 3-5分钟快看 4-销售技巧 多个中间用‘，’隔开
+        }], // 课程标签：1-产品详解 2-专业知识 3-5分钟快看 4-销售技巧 多个中间用‘，’隔开
+        hideOA: false
     },
     mixins: [shareMixin],
     onShow () {
@@ -162,6 +172,14 @@ wepy.page({
         }, 1000);
     },
     methods: {
+        bindOaLoad (e) {
+            // this.toast('加载成功' + e.errMsg);
+        },
+        bindErrorLoad (e) {
+            console.log('bindErrorLoad -> ', e);
+            // this.toast('加载失败' + e.$wx.detail.errMsg);
+            this.hideOA = true;
+        },
         handleSearch (e) {
             this.trackEvent(['学习', '搜索', `搜索${e.$wx.detail.value}`]);
             this.$navigate('search', {

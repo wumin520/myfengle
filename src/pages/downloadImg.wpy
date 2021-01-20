@@ -1,0 +1,57 @@
+<template>
+    <div class="page_">
+        <image class="img_" mode="widthFix" src="{{posterUrl}}">
+        </image>
+        <div class="btn_wrap_">
+            <button class="btn_" @click="handleDownload">点击保存海报</button>
+        </div>
+    </div>
+</template>
+<style lang="less" scoped>
+.page_ {
+    padding-bottom: 100rpx;
+    .btn_wrap_ {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    .img_ {
+        width: 100%;
+        height: auto;
+    }
+    .btn_ {
+        background: #ff4a35;
+        margin: 12px;
+        color: #fff;
+        font-size: 32rpx;
+        padding: 24rpx 0;
+        border-radius: 12rpx;
+        &::after {
+            display: none;
+        }
+    }
+}
+</style>
+<script>
+import wepy from '@wepy/core';
+import fileMixin from '@/mixins/file'
+
+wepy.page({
+    data: {
+        posterUrl: ''
+    },
+    mixins: [fileMixin],
+    onLoad (e) {
+        console.log(e);
+        this.posterUrl = decodeURIComponent(e.url);
+    },
+    methods: {
+        handleDownload () {
+            this.downloadFile(this.posterUrl, () => {
+                this.toast('保存成功！');
+            })
+        }
+    }
+})
+</script>
