@@ -1,6 +1,6 @@
 <template>
     <div class="page_">
-        <topNavBar extraClass="only"></topNavBar>
+        <topNavBar></topNavBar>
         <div class="content_">
             <img v-if="!visible" mode="widthFix" src="/static/img/1.jpg"/>
             <img @tap="visible=!visible" v-if="visible" mode="widthFix" src="/static/img/2.jpg"/>
