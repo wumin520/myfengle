@@ -1,599 +1,667 @@
 <template>
-    <div class="page_">
-        <topNavBar></topNavBar>
-        <div>
-            <video id="myVideo" v-if="detailInfo.courseType == 1&&videoUrl" src="{{videoUrl}}" controls="true" objectFit="contain" @pause="pause"
-              @waiting="waiting" @play="handlePlay" @error="error" @ended="handleVideoEnded">
-            </video>
-            <div v-else-if="detailInfo.courseType == 2&&videoUrl">
-                <customAudio @ended="handleVideoEnded" :source="medioInfo"></customAudio>
-            </div>
-            <image class="poster_" mode="widthFix" v-else src="{{detailInfo.videoCoverUrl}}">
-            </image>
-        </div>
-        <div class="intro_bar_">
+    <div>
+        <div class="page_" @click.self="shareBol=false">
+            <topNavBar></topNavBar>
             <div>
-                <image src="{{teacherInfo.avatarUrl}}"></image>
-                <div class="left_">
-                    <label>{{teacherInfo.tutorName}}</label>
-                    <p class="desc_">{{teacherInfo.briefIntroduction}}</p>
+                <video id="myVideo" v-if="detailInfo.courseType == 1&&videoUrl" src="{{videoUrl}}" controls="true" objectFit="contain" @pause="pause" @waiting="waiting" @play="handlePlay" @error="error" @ended="handleVideoEnded">
+                                                            </video>
+                <div v-else-if="detailInfo.courseType == 2&&videoUrl">
+                    <customAudio @ended="handleVideoEnded" :source="medioInfo"></customAudio>
                 </div>
+                <image class="poster_" mode="widthFix" v-else src="{{detailInfo.videoCoverUrl}}"></image>
             </div>
-            <div>
-                <button @click="handleAttention" class="btn_like_ {{attentioned ? 'liked_' : ''}}" size="defult" type="defult">
-                  {{!attentioned ? '+关注' : '已关注'}}
-                </button>
-            </div>
-        </div>
-        <menus @change="handleMenuChange" :activeIndex="type" :list="menus"></menus>
-        <div v-if="type == 1" class="detail_">
-            <h3 class="title_">课程介绍</h3>
-            <p>
-                {{detailInfo.briefIntroduction}}
-            </p>
-            <div class="line_"></div>
-            <h3 class="title_">适合人群</h3>
-            <p>
-                {{detailInfo.suitablePeople}}
-            </p>
-        </div>
-        <div v-else-if="type == 2" class="detail_ list_wrap_ course_list_">
-            <h3 class="title_">课程列表</h3>
-            <div class="desc_">更新完成/共{{detailInfo.videoNumber}}期</div>
-            <ul>
-                <li @click="handleCourseChange(item)" v-for="item in detailInfo.mySchoolVideoList" class="item_">
-                    <div class="sub_title_">{{item.videoName}}</div>
-                    <div class="sub_desc_">
-                        <!-- 时长 暂无 |  -->
-                        <!-- {{item.studiedNumber}}次学习 -->
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div v-else-if="type == 3">
-            <div class="detail_ list_wrap_ comment_">
-                <h3 class="title_">全部评价</h3>
-                <!-- <div @click="showComment=true" class="btn_comment_"><image class="img_" src="/static/img/12.png"></image>写评论</div> -->
-                <!-- <div class="desc_">更新完成/共6期</div> -->
-                <div class="input_wrap_">
+            <div class="intro_bar_">
+                <div>
+                    <image src="{{teacherInfo.avatarUrl}}"></image>
                     <div class="left_">
-                        <input v-model="commentText" minlength="10" class="input_comment_" placeholder="请输入您对课程的评价(最少10个字)" placeholder-class="phc_">
+                        <label>{{teacherInfo.tutorName}}</label>
+                        <p class="desc_">{{teacherInfo.briefIntroduction}}</p>
                     </div>
-                    <view><button @click="handleCommentBlur" size="defult" type="defult" class="btn_submit_comment_">发表</button></view>
                 </div>
+                <div>
+                    <button @click="handleAttention" class="btn_like_ {{attentioned ? 'liked_' : ''}}" size="defult" type="defult">
+                                                                  {{!attentioned ? '+关注' : '已关注'}}
+                                                                </button>
+                </div>
+            </div>
+            <div class="share_div">
+                <menus @change="handleMenuChange" :activeIndex="type" :list="menus" :share='true'></menus>
+                <img src="/static/img/fenxiang.png" @click.stop="shareClick()" class="share_img" alt="">
+            </div>
+            <div v-if="type == 1" class="detail_">
+                <h3 class="title_">课程介绍</h3>
+                <p>
+                    {{detailInfo.briefIntroduction}}
+                </p>
+                <div class="line_"></div>
+                <h3 class="title_">适合人群</h3>
+                <p>
+                    {{detailInfo.suitablePeople}}
+                </p>
+            </div>
+            <div v-else-if="type == 2" class="detail_ list_wrap_ course_list_">
+                <h3 class="title_">课程列表</h3>
+                <div class="desc_">更新完成/共{{detailInfo.videoNumber}}期</div>
                 <ul>
-                    <li v-for="item in comments" class="item_">
-                        <div>
-                            <image src="{{item.avatarUrl}}"></image>
-                            <div class="intro_">
-                                <div class="sub_title_">{{item.nickname}}</div>
-                                <div class="sub_desc_">{{item.evaluation}}</div>
-                            </div>
-                        </div>
-                        <div>
-                            <image @click="handleLike(item)" src="{{item.liked ? '/static/img/7.png' : '/static/img/8.png'}}" class="btn_like_"></image>
-                            <label v-if="item.likeNumber > 0">{{item.likeNumber}}</label>
+                    <li @click="handleCourseChange(item)" v-for="item in detailInfo.mySchoolVideoList" class="item_">
+                        <div class="sub_title_">{{item.videoName}}</div>
+                        <div class="sub_desc_">
+                            <!-- 时长 暂无 |  -->
+                            <!-- {{item.studiedNumber}}次学习 -->
                         </div>
                     </li>
                 </ul>
             </div>
-
+            <div v-else-if="type == 3">
+                <div class="detail_ list_wrap_ comment_">
+                    <h3 class="title_">全部评价</h3>
+                    <!-- <div @click="showComment=true" class="btn_comment_"><image class="img_" src="/static/img/12.png"></image>写评论</div> -->
+                    <!-- <div class="desc_">更新完成/共6期</div> -->
+                    <div class="input_wrap_">
+                        <div class="left_">
+                            <input v-model="commentText" minlength="10" class="input_comment_" placeholder="请输入您对课程的评价(最少10个字)" placeholder-class="phc_">
+                        </div>
+                        <view><button @click="handleCommentBlur" size="defult" type="defult" class="btn_submit_comment_">发表</button></view>
+                    </div>
+                    <ul>
+                        <li v-for="item in comments" class="item_pj">
+                            <div class="item_header">
+                                <div>
+                                    <image src="{{item.avatarUrl}}"></image>
+                                    <div class="intro_">
+                                        <div class="sub_title_">{{item.nickname}}</div>
+                                        <div class="sub_desc_">{{item.evaluation}}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <image @click="handleLike(item)" src="{{item.liked ? '/static/img/7.png' : '/static/img/8.png'}}" class="btn_like_"></image>
+                                    <label v-if="item.likeNumber > 0">{{item.likeNumber}}</label>
+                                </div>
+                            </div>
+                            <div class="sub_adminReply" v-if="item.adminReply">管理员回复:{{item.adminReply}}</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div v-else-if="type == 4" class="detail_ list_wrap_ other_course_">
+                <h3 class="title_">其他课程推荐</h3>
+                <courseList theme="white"></courseList>
+            </div>
         </div>
-        <div v-else-if="type == 4" class="detail_ list_wrap_ other_course_">
-            <h3 class="title_">其他课程推荐</h3>
-            <courseList theme="white"></courseList>
-        </div>
+        <share v-if='shareBol' :sharePoster='sharePoster'></share>
     </div>
 </template>
+
 <style lang="scss" scoped>
-.page_ {
-    .audio_wrap_ {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40rpx 0;
-    }
-    .phc_ {
-        font-size: 25rpx;
-        font-family: PingFang SC;
-        font-weight: 400;
-        color: #999999;
-    }
-    .poster_ {
-        width: 100%;
-        height: auto;
-    }
-    video {
-        width: 100%;
-    }
-    .intro_bar_ {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 28rpx;
-        background: #FFFFFF;
-        box-shadow: 0px 6rpx 23rpx 5rpx rgba(214, 214, 223, 0.35);
-        image {
-            width: 69rpx;
-            height: 69rpx;
-            vertical-align: top;
+    .page_ {
+        .share_div {
+            position: relative;
+            .share_img {
+                position: absolute;
+                right: 5px;
+                top: -15px;
+                width: 70px;
+                height: 90px;
+            }
         }
-        .left_ {
-            display: inline-block;
-            margin-left: 37rpx;
-            max-width: 400rpx;
-            word-break: break-all;
-            label {
-                display: block;
-                height: 28rpx;
-                line-height: 28rpx;
+        .audio_wrap_ {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40rpx 0;
+        }
+        .phc_ {
+            font-size: 25rpx;
+            font-family: PingFang SC;
+            font-weight: 400;
+            color: #999999;
+        }
+        .poster_ {
+            width: 100%;
+            height: auto;
+        }
+        video {
+            width: 100%;
+        }
+        .intro_bar_ {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28rpx;
+            background: #FFFFFF;
+            box-shadow: 0px 6rpx 23rpx 5rpx rgba(214, 214, 223, 0.35);
+            image {
+                width: 69rpx;
+                height: 69rpx;
+                vertical-align: top;
+            }
+            .left_ {
+                display: inline-block;
+                margin-left: 37rpx;
+                max-width: 400rpx;
+                word-break: break-all;
+                label {
+                    display: block;
+                    height: 28rpx;
+                    line-height: 28rpx;
+                    font-size: 30rpx;
+                    font-family: PingFang SC;
+                    font-weight: bold;
+                    color: #333333;
+                }
+                .desc_ {
+                    font-size: 25rpx;
+                    font-family: PingFang SC;
+                    font-weight: 400;
+                    color: #999999;
+                    margin-top: 12rpx;
+                }
+            }
+            .btn_like_ {
+                height: 55rpx;
+                line-height: 55rpx;
+                background: linear-gradient(90deg, #EAD19C, #E5C27C);
+                border-radius: 7rpx;
+                font-size: 25rpx;
+                font-family: PingFang SC;
+                font-weight: 600;
+                color: #9C733E;
+                text-align: center;
+                border: none;
+                &.liked_ {
+                    background: #EDE1C8;
+                }
+                &::after {
+                    display: none;
+                }
+            }
+        }
+        .detail_ {
+            margin: 0 28rpx;
+            padding: 35rpx 26rpx;
+            font-size: 25rpx;
+            font-family: PingFang SC;
+            font-weight: 400;
+            color: #999999;
+            background: #FAFAFA;
+            border-radius: 35rpx;
+            .title_ {
+                font-size: 30rpx;
+                font-family: PingFang SC;
+                font-weight: bold;
+                color: #333333;
+            }
+            .line_ {
+                height: 2rpx;
+                background: #F4F4F6;
+                border-radius: 2rpx;
+                margin: 32rpx 0 23rpx;
+            }
+        }
+        .list_wrap_ {
+            margin: 0 28rpx;
+            padding: 35rpx 26rpx;
+            background: #FAFAFA;
+            border-radius: 35rpx;
+            .title_ {
                 font-size: 30rpx;
                 font-family: PingFang SC;
                 font-weight: bold;
                 color: #333333;
             }
             .desc_ {
+                margin: 18rpx 0 27rpx;
                 font-size: 25rpx;
                 font-family: PingFang SC;
                 font-weight: 400;
                 color: #999999;
-                margin-top: 12rpx;
             }
-        }
-        .btn_like_ {
-            height: 55rpx;
-            line-height: 55rpx;
-            background: linear-gradient(90deg, #EAD19C, #E5C27C);
-            border-radius: 7rpx;
-            font-size: 25rpx;
-            font-family: PingFang SC;
-            font-weight: 600;
-            color: #9C733E;
-            text-align: center;
-            border: none;
-            &.liked_ {
-                background: #EDE1C8;
-            }
-            &::after {
-                display: none;
-            }
-        }
-    }
-    .detail_ {
-        margin: 0 28rpx;
-        padding: 35rpx 26rpx;
-        font-size: 25rpx;
-        font-family: PingFang SC;
-        font-weight: 400;
-        color: #999999;
-        background: #FAFAFA;
-        border-radius: 35rpx;
-
-        .title_ {
-            font-size: 30rpx;
-            font-family: PingFang SC;
-            font-weight: bold;
-            color: #333333;
-        }
-        .line_ {
-            height: 2rpx;
-            background: #F4F4F6;
-            border-radius: 2rpx;
-            margin: 32rpx 0 23rpx;
-        }
-    }
-    .list_wrap_ {
-        margin: 0 28rpx;
-        padding: 35rpx 26rpx;
-        background: #FAFAFA;
-        border-radius: 35rpx;
-        .title_ {
-            font-size: 30rpx;
-            font-family: PingFang SC;
-            font-weight: bold;
-            color: #333333;
-        }
-        .desc_ {
-            margin: 18rpx 0 27rpx;
-            font-size: 25rpx;
-            font-family: PingFang SC;
-            font-weight: 400;
-            color: #999999;
-        }
-        .item_ {
-            background: #FFFFFF;
-            border-radius: 17rpx;
-            padding: 24rpx 28rpx;
-            margin-bottom: 14rpx;
-
-            .sub_title_ {
-                font-size: 30rpx;
-                font-family: PingFang SC;
-                font-weight: bold;
-                color: #9C733E;
-            }
-            .sub_desc_ {
-                font-size: 25rpx;
-                font-family: PingFang SC;
-                font-weight: 400;
-                margin-top: 17rpx;
-            }
-        }
-        &.other_course_ {
-            .title_ {
-                margin-bottom: 28rpx;
-            }
-        }
-        &.course_list_ {
-            .sub_desc_ {
-                color: #9C733E;
-            }
-        }
-        &.comment_ {
-            position: relative;
-           image {
-               width: 69rpx;
-               height: 69rpx;
-               margin-right: 20rpx;
-               vertical-align: top;
-           }
-           .input_wrap_ {
-               display: flex;
-               .left_ {
-                   flex: 1;
-               }
-           }
-            .input_comment_ {
-                margin-right: 28rpx;
-                height: 79rpx;
-                padding-left: 36rpx;
-                background: #fff;
-                border: 2rpx solid #E3E3E3;
+            .item_,
+            .item_pj {
+                background: #FFFFFF;
                 border-radius: 17rpx;
-                margin-bottom: 21rpx;
-                &::after {
-                    display: none;
+                padding: 24rpx 28rpx;
+                margin-bottom: 14rpx;
+                .sub_title_ {
+                    font-size: 30rpx;
+                    font-family: PingFang SC;
+                    font-weight: bold;
+                    color: #9C733E;
                 }
-            }
-            .btn_submit_comment_ {
-                font-size: 25rpx;
-                font-family: PingFang SC;
-                font-weight: 500;
-                color: #9C733E;
-                width: 124rpx;
-                height: 79rpx;
-                line-height: 79rpx;
-                background: linear-gradient(90deg, #EAD19C, #E5C27C);
-                border-radius: 17rpx;
-            }
-           .btn_comment_ {
-               position: absolute;
-               top: 39rpx;
-               right: 30rpx;
-                font-size: 21rpx;
-                font-family: PingFang SC;
-                font-weight: bold;
-                color: #D1AF6B;
-               .img_ {
-                   width: 27rpx;
-                   height: 22rpx;
-                   margin-right: 10rpx;
-                   vertical-align: middle;
-               }
-           }
-            .title_ {
-                margin-bottom: 28rpx;
-            }
-           .item_ {
-               display: flex;
-               justify-content: space-between;
-               align-items: flex-end;
                 .sub_desc_ {
-                    color: #999999;
+                    font-size: 25rpx;
+                    font-family: PingFang SC;
+                    font-weight: 400;
+                    margin-top: 17rpx;
                 }
-           }
-           .intro_ {
-               display: inline-block;
-           }
-           .btn_like_ {
-               width: 37rpx;
-               height: 35rpx;
-               margin-left: 10rpx;
-           }
+                .sub_adminReply {
+                    color: rgb(226,199,143);
+                    width: 100%;
+                    padding-left: 89rpx;
+                    padding-top: 10rpx;
+                }
+            }
+            &.other_course_ {
+                .title_ {
+                    margin-bottom: 28rpx;
+                }
+            }
+            &.course_list_ {
+                .sub_desc_ {
+                    color: #9C733E;
+                }
+            }
+            &.comment_ {
+                position: relative;
+                image {
+                    width: 69rpx;
+                    height: 69rpx;
+                    margin-right: 20rpx;
+                    vertical-align: top;
+                }
+                .input_wrap_ {
+                    display: flex;
+                    .left_ {
+                        flex: 1;
+                    }
+                }
+                .input_comment_ {
+                    margin-right: 28rpx;
+                    height: 79rpx;
+                    padding-left: 36rpx;
+                    background: #fff;
+                    border: 2rpx solid #E3E3E3;
+                    border-radius: 17rpx;
+                    margin-bottom: 21rpx;
+                    &::after {
+                        display: none;
+                    }
+                }
+                .btn_submit_comment_ {
+                    font-size: 25rpx;
+                    font-family: PingFang SC;
+                    font-weight: 500;
+                    color: #9C733E;
+                    width: 124rpx;
+                    height: 79rpx;
+                    line-height: 79rpx;
+                    background: linear-gradient(90deg, #EAD19C, #E5C27C);
+                    border-radius: 17rpx;
+                }
+                .btn_comment_ {
+                    position: absolute;
+                    top: 39rpx;
+                    right: 30rpx;
+                    font-size: 21rpx;
+                    font-family: PingFang SC;
+                    font-weight: bold;
+                    color: #D1AF6B;
+                    .img_ {
+                        width: 27rpx;
+                        height: 22rpx;
+                        margin-right: 10rpx;
+                        vertical-align: middle;
+                    }
+                }
+                .title_ {
+                    margin-bottom: 28rpx;
+                }
+                .item_pj {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .item_header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-end;
+                }
+                .item_ {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-end;
+                    .sub_desc_ {
+                        color: #999999;
+                    }
+                }
+                .intro_ {
+                    display: inline-block;
+                }
+                .btn_like_ {
+                    width: 37rpx;
+                    height: 35rpx;
+                    margin-left: 10rpx;
+                }
+            }
         }
     }
-}
-
 </style>
+
 <script>
-import wepy from '@wepy/core';
-import api from '@/utils/api';
-import shareMixin from '@/mixins/share'
-import { KEY_IS_LOGIN, USER_ID } from '@/utils/constant';
-
-let systemInfo = wx.getSystemInfoSync();
-const statusBarHeight = systemInfo.statusBarHeight;
-var curPages =  getCurrentPages();
-console.log(statusBarHeight, 'statusBarHeight');
-
-const userId = wx.getStorageSync(USER_ID);
-
-wepy.page({
-    data: {
-        commentText: '',
-        userId,
-        showComment: false,
-        videoUrl: '',
-        statusBarHeight,
-        src: '',
-        type: 2,
-        menus: [{
-            name: '课程介绍',
-            value: 1
-        }, {
-            name: '课程列表',
-            value: 2
-        }, {
-            name: '讨论区',
-            value: 3
-        }, 
-            // {
-            //     name: '相关推荐',
-            //     value: 4
-            // }
-        ],
-        detailInfo: {},
-        medioInfo: {},
-        teacherInfo: {},
-        comments: [],
-        attentioned: false
-    },
-    mixins: [shareMixin],
-    onReady() {
-        this.videoContext = wx.createVideoContext('myVideo');
-    },
-    onLoad(query) {
-        const { id } = query;
-        this._id = id;
-        this.queryMySchoolCourseById(parseInt(id));
-    },
-    onShow () {
-        // 登录后返回该页面取值
-        this.userId = wx.getStorageSync(USER_ID);
-        if (!this.userId) {
-            return
-        }
-
-        api.queryAttentionList(this.userId).then(res => res.data).then(data => {
-            let si = setInterval(() => {
-                if (this.detailInfo.tutorId) {
-                    clearInterval(si);
-                    this.attentioned = data.content.filter(item => item.tutorId == this.detailInfo.tutorId).length > 0;
+    import wepy from '@wepy/core';
+    import api from '@/utils/api';
+    // import shareMixin from '@/mixins/share'
+    import {
+        KEY_IS_LOGIN,
+        USER_ID
+    } from '@/utils/constant';
+    let systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight;
+    var curPages = getCurrentPages();
+    console.log(statusBarHeight, 'statusBarHeight');
+    const userId = wx.getStorageSync(USER_ID);
+    wepy.page({
+        data: {
+            commentText: '',
+            userId,
+            showComment: false,
+            videoUrl: '',
+            statusBarHeight,
+            src: '',
+            type: 2,
+            menus: [{
+                name: '课程介绍',
+                value: 1
+            }, {
+                name: '课程列表',
+                value: 2
+            }, {
+                name: '讨论区',
+                value: 3
+            }, ],
+            detailInfo: {},
+            medioInfo: {},
+            teacherInfo: {},
+            comments: [],
+            attentioned: false,
+            imgUrl: '',
+            shareBol: false,
+            title: '',
+            sharePoster: '',
+            query: {},
+            id: ''
+        },
+        // mixins: [shareMixin],
+        onShareAppMessage(res) {
+            if (res.from == 'button') {
+                return {
+                    title: this.title,
+                    imageUrl: decodeURIComponent(this.imgUrl)// 图片 URL
                 }
-            }, 100);
-        })
-    },
-    created (e) {
-        curPages = getCurrentPages();
-    },
-    methods: {
-        handlePlay () {
-            if (!this.isLogined()) {
-                this.videoContext.pause();
+            } else {
+                return {
+                    title: decodeURI(this.title),
+                    path: '',
+                    imageUrl: decodeURIComponent(this.imgUrl)
+                }
             }
         },
-        handleVideoEnded () {
-            this.finishViewVideo({
-                cuswebuserid: this.userId,
-                status: 2,
-                videoId: this._videoId,
-            }).then(data => {
-                if (data.content == 'integralPlusOne') {
-                    this.toast('完成观看，积分+1')
+        onReady() {
+            this.videoContext = wx.createVideoContext('myVideo');
+        },
+        onLoad(query) {
+            if (query.scene) { // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
+                var scene = decodeURIComponent(options.scene)
+                var obj = {};
+                for (var i = 0; i < scene.split('*').length; i++) {
+                    var arr = scene.split('*')[i].split('/');
+                    obj[arr[0]] = arr[1];
                 }
+               this.query = obj
+            }else{
+               this.query = query
+            }
+            const {
+                id,
+                imgUrl
+            } = query;
+            this._id = id;
+            this.id = id
+            this.imgUrl = imgUrl;
+            this.queryMySchoolCourseById(parseInt(id));
+        },
+        onShow() {
+            // 登录后返回该页面取值
+            this.userId = wx.getStorageSync(USER_ID);
+            if (!this.userId) {
+                return
+            }
+            api.queryAttentionList(this.userId).then(res => res.data).then(data => {
+                let si = setInterval(() => {
+                    if (this.detailInfo.tutorId) {
+                        clearInterval(si);
+                        this.attentioned = data.content.filter(item => item.tutorId == this.detailInfo.tutorId).length > 0;
+                    }
+                }, 100);
             })
         },
-        finishViewVideo (params) {
-            return api.finishViewVideo(params).then(res => res.data)
+        created(e) {
+            curPages = getCurrentPages();
         },
-        handleLike (item) {
-            if (item.liked) {
-                api.cancelLike({
+        methods: {
+            onShareTimeline(res) {
+                return {
+                    title: this.data.title,
+                    imageUrl: this.data.sharePoster, // 图片 URL
+                }
+            },
+            shareClick() {
+                this.shareBol = !this.shareBol
+            },
+            handlePlay() {
+                if (!this.isLogined()) {
+                    this.videoContext.pause();
+                }
+            },
+            handleVideoEnded() {
+                this.finishViewVideo({
+                    cuswebuserid: this.userId,
+                    status: 2,
+                    videoId: this._videoId,
+                }).then(data => {
+                    if (data.content == 'integralPlusOne') {
+                        this.toast('完成观看，积分+1')
+                    }
+                })
+            },
+            finishViewVideo(params) {
+                return api.finishViewVideo(params).then(res => res.data)
+            },
+            handleLike(item) {
+                if (item.liked) {
+                    api.cancelLike({
+                        cuswebuserid: this.userId,
+                        userCourseId: item.id
+                    }).then(res => {
+                        item.liked = false;
+                        this.comments = this.comments.map(c => {
+                            if (item.id == c.id) {
+                                c.liked = false
+                                c.likeNumber = (c.likeNumber || 1) - 1
+                            }
+                            return {
+                                ...c
+                            }
+                        })
+                        // this.comments = [...this.comments];
+                    })
+                    return
+                }
+                api.addLike({
                     cuswebuserid: this.userId,
                     userCourseId: item.id
                 }).then(res => {
-                    item.liked = false;
+                    item.liked = true;
                     this.comments = this.comments.map(c => {
                         if (item.id == c.id) {
-                            c.liked = false
-                            c.likeNumber = (c.likeNumber || 1) - 1
+                            c.liked = true
+                            c.likeNumber = (c.likeNumber || 0) + 1
                         }
                         return {
                             ...c
                         }
                     })
-                    // this.comments = [...this.comments];
                 })
-                return
-            }
-            api.addLike({
-                cuswebuserid: this.userId,
-                userCourseId: item.id
-            }).then(res => {
-                item.liked = true;
-                this.comments = this.comments.map(c => {
-                    if (item.id == c.id) {
-                        c.liked = true
-                        c.likeNumber = (c.likeNumber || 0) + 1
-                    }
-                    return {
-                        ...c
-                    }
+            },
+            cancelAttention() {
+                api.cancelAttention({
+                    cuswebuserid: this.userId,
+                    tutorId: this.detailInfo.tutorId
+                }).then(res => {
+                    this.attentioned = false
                 })
-            })
-        },
-        cancelAttention () {
-            api.cancelAttention({
-                cuswebuserid: this.userId,
-                tutorId: this.detailInfo.tutorId
-            }).then(res => {
-                this.attentioned = false
-            })
-        },
-        handleAttention () {
-            if (this.attentioned) {
-                this.cancelAttention()
-                return
-            }
-            this.trackEvent('课程', '关注', `${this.detailInfo.tutorName}`);
-            api.attentionTeacher({
-                cuswebuserid: this.userId,
-                tutorId: this.detailInfo.tutorId
-            }).then(res => res.data).then(data => {
-                this.attentioned = true
-            })
-        },
-        toast(title) {
-            wx.showToast({
-                title, //提示的内容,
-                icon: 'none', //图标
-                duration: 3000
-            })
-        },
-        handleCommentBlur (e) {
-            const content = this.commentText;
-            if (this._st) {
-                this.toast('每三分钟只能发一次');
-                return
-            }
-            if (content.length < 10) {
-                this.toast('评论最少10个字');
-                return
-            }
-            this._st = setTimeout(() => {
-                clearTimeout(this._st);
-                this._st = null
-            }, 3 * 60 * 1000);
-            this.showComment = false;
-            const params = {
-                courseId: this._id,
-                cuswebuserid: this.userId,
-                evaluation: content,
-                likeNumber: 0
-            };
-            this.addComment(params);  
-            this.trackEvent('课程', '讨论区', `讨论区-${content}`);
-        },
-        addComment (params) {
-            api.addComment(params).then(res => res.data).then(data => {
-                this.commentText = '';
-                this.queryCommentByCId(this.detailInfo.id);
-            })
-        },
-        playCourse (item) {
-            this.trackAutoEvent(item);
-            this.trackEvent('课程', '课程列表', `${this.detailInfo.title}-${item.videoName}`);
-            this.videoUrl = item.videoUrl;
-            this._videoId = item.id;
-            // 播放音频
-            if (this.detailInfo.courseType == 2) {
-                this.medioInfo = {
-                    fullName: item.videoName,
-                    name: item.videoName.substr(0, 6),
-                    poster: this.detailInfo.videoCoverUrl,
-                    author: this.detailInfo.tutorName,
-                    src: this.videoUrl
-                };
-            }
-
-        },
-        isLogined () {
-            if (!wx.getStorageSync(KEY_IS_LOGIN)) {
-                wx.showToast({
-                    title: '请先登录',
-                    icon: 'none',
-                    duration: 3000
-                });
-                this.$navigate('login');
-                return false
-            }
-            return true;
-        },
-        handleCourseChange (item) {
-            if (this.isLogined()) {
-                this.playCourse(item);
-            }
-        },
-        queryMySchoolCourseById (id) {
-            return api.queryMySchoolCourseById(id).then(res => res.data).then(data => {
-                this.detailInfo = data.content;
-                const courseList = this.detailInfo.mySchoolVideoList;
-                if (courseList && courseList.length < 1) {
-                    this.toast('敬请期待，马上就来~');
-                } else {
-                    this.playCourse(courseList[0]);
+            },
+            handleAttention() {
+                if (this.attentioned) {
+                    this.cancelAttention()
+                    return
                 }
-                this.queryMySchoolTutor(this.detailInfo.tutorId);
-            })
-        },
-        trackAutoEvent (item) {
-            getApp().sensors.track('newbees_applets_course',{
-                course_name: this.detailInfo.title,
-                course_lesson_name: item.videoName,
-                course_teacher: this.detailInfo.tutorName
-            });
-        },
-        queryMySchoolTutor(id) {
-            api.queryMySchoolTutor(id).then(res => res.data).then(data => {
-                this.teacherInfo = data.content;
-            });
-        },
-        queryCommentByCId (id) {
-            const p = api.queryLike({
-                courseId: this._id,
-                cuswebuserid: this.userId
-            }).then(res => res.data)
-            const p1 = api.queryCommentByCId(id).then(res => res.data);
-            Promise.all([p, p1]).then(res => {
-                const [data, data1] = res;
-                const arr = data.content.map(item => {
-                    return item.userCourseId
-                });
-                this.comments = data1.content.map(item => {
-                    return {
-                        ...item,
-                        liked: arr.indexOf(item.id) > -1 ? true : false
-                    }
+                this.trackEvent('课程', '关注', `${this.detailInfo.tutorName}`);
+                api.attentionTeacher({
+                    cuswebuserid: this.userId,
+                    tutorId: this.detailInfo.tutorId
+                }).then(res => res.data).then(data => {
+                    this.attentioned = true
                 })
-            })
-        },
-        jumpTo (url) {
-
-        },
-        handleMenuChange (val, index, item) {
-            this.trackEvent('课程', '标签栏', item.name);
-            this.type = val;
-            if (val == 3) {
-                this.queryCommentByCId(this.detailInfo.id)
-            }
-        },
-        pause () {
-
-        },
-        waiting () {
-
-        },
-        error () {
-
+            },
+            toast(title) {
+                wx.showToast({
+                    title, //提示的内容,
+                    icon: 'none', //图标
+                    duration: 3000
+                })
+            },
+            handleCommentBlur(e) {
+                const content = this.commentText;
+                if (this._st) {
+                    this.toast('每三分钟只能发一次');
+                    return
+                }
+                if (content.length < 10) {
+                    this.toast('评论最少10个字');
+                    return
+                }
+                this._st = setTimeout(() => {
+                    clearTimeout(this._st);
+                    this._st = null
+                }, 3 * 60 * 1000);
+                this.showComment = false;
+                const params = {
+                    courseId: this._id,
+                    cuswebuserid: this.userId,
+                    evaluation: content,
+                    likeNumber: 0
+                };
+                this.addComment(params);
+                this.trackEvent('课程', '讨论区', `讨论区-${content}`);
+            },
+            addComment(params) {
+                api.addComment(params).then(res => res.data).then(data => {
+                    this.commentText = '';
+                    this.queryCommentByCId(this.detailInfo.id);
+                })
+            },
+            playCourse(item) {
+                this.trackAutoEvent(item);
+                this.trackEvent('课程', '课程列表', `${this.detailInfo.title}-${item.videoName}`);
+                this.videoUrl = item.videoUrl;
+                this._videoId = item.id;
+                // 播放音频
+                if (this.detailInfo.courseType == 2) {
+                    this.medioInfo = {
+                        fullName: item.videoName,
+                        name: item.videoName.substr(0, 6),
+                        poster: this.detailInfo.videoCoverUrl,
+                        author: this.detailInfo.tutorName,
+                        src: this.videoUrl
+                    };
+                }
+            },
+            isLogined() {
+                if (!wx.getStorageSync(KEY_IS_LOGIN)) {
+                    wx.showToast({
+                        title: '请先登录',
+                        icon: 'none',
+                        duration: 3000
+                    });
+                    this.$navigate('login');
+                    return false
+                }
+                return true;
+            },
+            handleCourseChange(item) {
+                if (this.isLogined()) {
+                    this.playCourse(item);
+                }
+            },
+            queryMySchoolCourseById(id) {
+                return api.queryMySchoolCourseById(id).then(res => res.data).then(data => {
+                    this.detailInfo = data.content;
+                    const courseList = this.detailInfo.mySchoolVideoList;
+                    this.sharePoster = this.detailInfo.sharePoster;
+                    this.title = this.detailInfo.title
+                    if (courseList && courseList.length < 1) {
+                        this.toast('敬请期待，马上就来~');
+                    } else {
+                        this.playCourse(courseList[0]);
+                    }
+                    this.queryMySchoolTutor(this.detailInfo.tutorId);
+                })
+            },
+            trackAutoEvent(item) {
+                getApp().sensors.track('newbees_applets_course', {
+                    course_name: this.detailInfo.title,
+                    course_lesson_name: item.videoName,
+                    course_teacher: this.detailInfo.tutorName
+                });
+            },
+            queryMySchoolTutor(id) {
+                api.queryMySchoolTutor(id).then(res => res.data).then(data => {
+                    this.teacherInfo = data.content;
+                });
+            },
+            queryCommentByCId(id) {
+                const p = api.queryLike({
+                    courseId: this._id,
+                    cuswebuserid: this.userId
+                }).then(res => res.data)
+                const p1 = api.queryCommentByCId(id).then(res => res.data);
+                Promise.all([p, p1]).then(res => {
+                    const [data, data1] = res;
+                    const arr = data.content.map(item => {
+                        return item.userCourseId
+                    });
+                    this.comments = data1.content.map(item => {
+                        return {
+                            ...item,
+                            liked: arr.indexOf(item.id) > -1 ? true : false
+                        }
+                    })
+                })
+            },
+            jumpTo(url) {},
+            handleMenuChange(val, index, item) {
+                this.trackEvent('课程', '标签栏', item.name);
+                this.type = val;
+                if (val == 3) {
+                    this.queryCommentByCId(this.detailInfo.id)
+                }
+                if (val == 4) {
+                    this.queryCommentByCId(this.detailInfo.id)
+                }
+            },
+            pause() {},
+            waiting() {},
+            error() {}
         }
-    }
-})
+    })
 </script>
+
 <config>
 {
   "navigationBarTitleText": "wepy",
   "usingComponents": {
     menus: '~@/components/menus',
+    share: '~@/components/share',
     courseList: '~@/components/courseList',
     topNavBar: '~@/components/topNavBar',
     customAudio: '~@/components/customAudio'

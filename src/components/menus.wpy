@@ -1,7 +1,9 @@
 <template>
     <scroll-view scroll-x scroll-with-animation>
         <ul class="menus_wrap_">
-            <li @click="handleChange(item, index)" v-for="(item, index) in list" class="{{index + 1 == activeIndex ? 'item_ active_' : 'item_'}}">{{item.name}}</li>
+            <li @click="handleChange(item, index)" v-for="(item, index) in list" class="{{index + 1 == activeIndex ? 'item_ active_' : 'item_'}}">
+                {{item.name}}
+            </li>
         </ul>
     </scroll-view>
 </template>
@@ -65,6 +67,9 @@ wepy.component({
     data: {
     },
     methods: {
+        shareClick(){
+
+        },
         handleChange (item, index) {
             this.activeIndex = index + 1;
             this.$emit('change', item.value, index, item);
