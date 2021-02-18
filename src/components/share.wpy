@@ -127,9 +127,9 @@
         },
         methods: {
             downImg() {　　　　　
+                let url  = this.sharePoster.split('://')[1]
                 wx.downloadFile({ //下载图片
-                    url: this.sharePoster,
-                    　 //需要下载的图片url
+                    url: `https://${url}`,//需要下载的图片url
                     success: function(res) {　
                         wx.saveImageToPhotosAlbum({　　　　　　　　　 //保存到本地
                             filePath: res.tempFilePath,
