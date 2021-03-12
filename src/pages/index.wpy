@@ -34,6 +34,15 @@
                 <image class="img_" src="/static/img/11.png"></image>
             </navigator>
         </div>
+        <div class="fixed_c" wx:if="{{showCategoryItem==true}}">
+            <div class="fix_con">
+                <span class="li_item {{item.active ? 'on' : ''}}" wx:for="{{categoryItemList}}" wx:key="index" data-index='{{index}}'  @click="btnclick">{{item.text}}</span>
+                <div class="btn_list">
+                    <span class="btn" @click='showCategoryItem=false'>取消</span>
+                    <span class="btn" @click="queryData">确定</span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <style lang="less" scoped>
@@ -92,6 +101,61 @@
         width: 100%;
         height: 168rpx;
     }
+    .fixed_c{
+        position: fixed;
+        left:0;
+        right:0;
+        top:0;
+        bottom:0;
+        .fix_con{
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            left:0;
+            right:0;
+            margin:0 auto;
+            background-color:#fff;
+            box-shadow: 0px 12px 36px 17px rgba(220, 225, 235, 0.35);
+            border-radius:20rpx;
+            padding:40rpx 26px;
+            width:390rpx;
+            .li_item{
+               color:#0E0E0E ;
+               font-size:25rpx;
+               background: #F6F6F6;
+               border-radius: 28px;
+               display:block;
+               padding:8px 0;
+               text-align:center;
+               margin-bottom:14px;
+               &.on{
+                background: linear-gradient(185deg, #EAD19C, #E5C27C); 
+               }
+               &:last-child{
+                   margin-bottom:0;
+               }
+            }
+            .btn_list{
+                display:flex;
+                justify-content: space-between;
+                .btn{
+                    display:inline-block;
+                    background-color: #F6F6F6;
+                    height:32px;
+                    line-height:32px;
+                    border-radius:28px;
+                    text-align:center;
+                    color:#0E0E0E ;
+                    font-size:25rpx;
+                    width:76px;
+                    text-align:center;
+                    &:last-child{
+                        background: linear-gradient(185deg, #EAD19C, #E5C27C); 
+                    }
+                }
+            }
+        }
+    }
 }
 .nav_header_ {
     height: 90rpx;
@@ -135,19 +199,74 @@ wepy.page({
             name: '全部',
             value: ''
         }, {
-            name: '产品详解',
+            name: '一分钟快看',
             value: 1
         }, {
-            name: '专业知识',
+            name: '5分钟详解',
             value: 2
         }, {
-            name: '5分钟快看',
+            name: '直播回看',
             value: 3
-        }, {
-            name: '销售技巧',
-            value: 4
-        }], // 课程标签：1-产品详解 2-专业知识 3-5分钟快看 4-销售技巧 多个中间用‘，’隔开
-        hideOA: false
+        }], // 课程标签：1-一分钟快看 2-5分钟详解 3-5分钟快看 4-直播回看 多个中间用‘，’隔开
+        hideOA: false,
+        categoryItemList:[//合辑类别细项
+            {
+                value:'1',
+                text:'理赔',
+                active:false
+            },
+            {
+                value:'2',
+                text:'核保',
+                active:false
+            },
+            {
+                value:'3',
+                text:'其他',
+                active:false
+            },
+        ],
+        categoryItemList1:[//5分钟详解细项
+            {
+                value:'1',
+                text:'理赔',
+                active:false
+            },
+            {
+                value:'2',
+                text:'核保',
+                active:false
+            },
+            {
+                value:'3',
+                text:'其他',
+                active:false
+            },
+        ],
+        categoryItemList2:[//直播回看细项
+            {
+                value:'1',
+                text:'年金理财',
+                active:false
+            },
+            {
+                value:'2',
+                text:'重疾医疗',
+                active:false
+            },
+            {
+                value:'3',
+                text:'团雇建工',
+                active:false
+            },
+            {
+                value:'4',
+                text:'时事解析',
+                active:false
+            },
+        ],
+        showCategoryItem:false,//是否展示类别细项
+        categoryValue:''
     },
     mixins: [shareMixin],
     onShow () {
@@ -188,10 +307,24 @@ wepy.page({
         },
         handleMenuChange (val, index, item) {
             this.trackEvent(['学习', '标签栏', `标签栏-${item.name}`]);
+           
             this.queryMySchoolCourse({
                 collectionCategory: val.toString(),
 
             })
+            
+            if(val.toString()=='2'){
+                if(val!=this.categoryValue){
+                    this.categoryItemList=JSON.parse(JSON.stringify(this.categoryItemList1))
+                }
+                this.showCategoryItem=true
+            }else if(val.toString()=='3'){
+                if(val!=this.categoryValue){
+                    this.categoryItemList=JSON.parse(JSON.stringify(this.categoryItemList2))
+                }
+                this.showCategoryItem=true
+            }
+            this.categoryValue=val
         },
         queryMySchoolBanner () {
             api.queryMySchoolBanner().then(res => res.data).then(data => {
@@ -219,6 +352,20 @@ wepy.page({
                 }
                 this.courseList = list;
             })
+        },
+        btnclick(e){
+            this.categoryItemList[e.currentTarget.dataset.index].active=!this.categoryItemList[e.currentTarget.dataset.index].active
+        },
+        queryData(){
+            if(this.categoryItemList.filter(item=>item.active==true).length>0){
+                let filer=this.categoryItemList.filter(item=>item.active==true)
+                let filter_value=filer.map(item=>{return item.value})
+                this.queryMySchoolCourse({
+                    collectionCategory: this.categoryValue.toString(),
+                    categoryItem:filter_value.join(',')
+                })
+                this.showCategoryItem=false
+            }
         }
     }
 })
