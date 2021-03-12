@@ -1,11 +1,11 @@
 <template>
 <div class="tabbar_wrap_">
-    <div class="tabbar_">
+    <!-- <div class="tabbar_">
         <div @click="handleChange(item, index)" v-for="(item, index) in list" class="{{selectedIndex == index + 1 ? 'selected_': ''}}">
             <image src="{{selectedIndex == index + 1 ? item.selectedImg : item.img}}" class="img_ a_"></image>
             {{item.title}}
         </div>
-    </div>
+    </div> -->
 </div>
 </template>
 <style lang="less" scoped>
@@ -55,22 +55,26 @@ const prePath = '/static/img/tabbar/';
 wepy.component({
     data: {
         selectedIndex: 2,
-        list: [{
-            img: prePath + '1.png',
-            selectedImg: prePath + '2.png',
-            title: '首页',
-            url: '/pages/mxtHome'
-        }, {
+        list: [
+        //     {
+        //     img: prePath + '1.png',
+        //     selectedImg: prePath + '2.png',
+        //     title: '首页',
+        //     url: '/pages/mxtHome'
+        // }, 
+        {
             img: prePath + '3.png',
             selectedImg: prePath + '4.png',
             title: '学习',
             url: '/pages/index'
-        }, {
-            img: prePath + '5.png',
-            selectedImg: prePath + '6.png',
-            title: '我的',
-            url: '/pages/my'
-        }]
+        },
+        //  {
+        //     img: prePath + '5.png',
+        //     selectedImg: prePath + '6.png',
+        //     title: '我的',
+        //     url: '/pages/my'
+        // }
+        ]
     },
     created () {
     },

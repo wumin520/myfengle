@@ -61,7 +61,9 @@ module.exports = {
       scene: wx.getStorageSync('scene')
     }).then(res => res.data).then(data => {
       const { openId } = data.content.responseAuthorizationData;
+      const { avatarUrl } = data.content.responseAuthorizationData;
       wx.setStorageSync('openId', openId);
+      wx.setStorageSync('avatarUrl', avatarUrl);
     })
   },
   saveUserInfo (payload) {

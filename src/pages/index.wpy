@@ -38,7 +38,7 @@
 </template>
 <style lang="less" scoped>
 .page_ {
-    padding: 0px 28rpx 160rpx;
+    padding: 0px 28rpx 0rpx;
     .swiper_ {
         height: 310rpx;
         margin-bottom: 41rpx;
