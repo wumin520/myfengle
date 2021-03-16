@@ -515,6 +515,17 @@
                     }
                 }, 100);
             })
+            this.scTimer = new Date().getTime()
+        },
+        onUnload () {
+            let duration = new Date().getTime() - this.scTimer;
+            // 引入 SDK 之后才可以这样使用
+            getApp().sensors.track('neebees_applets_course_vedio', {
+                course_name: this.detailInfo.title,
+                course_lesson_name: this.sc_course_lesson_name.join(','),
+                course_teacher: this.detailInfo.tutorName,
+                duration: duration
+            })
         },
         created(e) {
             curPages = getCurrentPages();
@@ -730,6 +741,7 @@
                 })
             },
             trackAutoEvent(item) {
+                (this.sc_course_lesson_name = (this.sc_course_lesson_name|| [])).push(item.videoName);
                 getApp().sensors.track('newbees_applets_course', {
                     course_name: this.detailInfo.title,
                     course_lesson_name: item.videoName,
