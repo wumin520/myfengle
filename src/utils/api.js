@@ -2,7 +2,7 @@ import request from './request';
 
 // const server = 'http://mykefeng.run4wd.com';
 const server = 'https://mykefeng.yutai365.com';
-const apiUrl=  server + '/test'
+const apiUrl=  server + '/test';
 
 const qs = {
     stringify: function (data) {
