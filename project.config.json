@@ -1,99 +1,91 @@
 {
-  "description": "A WePY project",
-  "setting": {
-    "urlCheck": true,
-    "es6": false,
-    "enhance": false,
-    "postcss": false,
-    "preloadBackgroundData": false,
-    "minified": false,
-    "newFeature": true,
-    "coverView": true,
-    "nodeModules": false,
-    "autoAudits": false,
-    "showShadowRootInWxmlPanel": true,
-    "scopeDataCheck": false,
-    "uglifyFileName": false,
-    "checkInvalidKey": true,
-    "checkSiteMap": true,
-    "uploadWithSourceMap": true,
-    "compileHotReLoad": false,
-    "useMultiFrameRuntime": false,
-    "useApiHook": true,
-    "babelSetting": {
-      "ignore": [],
-      "disablePlugins": [],
-      "outputPath": ""
-    },
-    "enableEngineNative": false,
-    "useIsolateContext": true,
-    "useCompilerModule": true,
-    "userConfirmedUseCompilerModuleSwitch": false,
-    "packNpmManually": false,
-    "packNpmRelationList": [],
-    "minifyWXSS": true
-  },
-  "compileType": "miniprogram",
-  "appid": "wx4c3e87db97c329be",
-  "projectname": "myfengle",
-  "miniprogramRoot": "weapp/",
-  "simulatorType": "wechat",
-  "simulatorPluginLibVersion": {},
-  "libVersion": "2.14.0",
-  "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
-    "plugin": {
-      "list": []
-    },
-    "game": {
-      "list": []
-    },
-    "gamePlugin": {
-      "list": []
-    },
-    "miniprogram": {
-      "list": [
-        {
-          "id": 0,
-          "name": "pages/webview",
-          "pathName": "pages/webview",
-          "query": "id=37",
-          "scene": null
-        },
-        {
-          "id": 1,
-          "name": "pages/index",
-          "pathName": "pages/index",
-          "query": "id=19",
-          "scene": null
-        },
-        {
-          "id": -1,
-          "name": "pages/search",
-          "pathName": "pages/search",
-          "query": "",
-          "scene": null
-        },
-        {
-          "id": 3,
-          "name": "pages/login",
-          "pathName": "pages/login",
-          "query": "id=19",
-          "scene": null
-        },
-        {
-          "id": 4,
-          "name": "pages/downloadImg",
-          "pathName": "pages/downloadImg",
-          "query": "url=https%3A%2F%2Fssish.oss-cn-hangzhou.aliyuncs.com%2FnewBee%2Fmyschool%2F1610007531911.png",
-          "scene": null
-        }
-      ]
-    }
-  }
+	"description": "A WePY project",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"preloadBackgroundData": false,
+		"minified": false,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"showShadowRootInWxmlPanel": true,
+		"scopeDataCheck": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"compileType": "miniprogram",
+	"appid": "wx4c3e87db97c329be",
+	"projectname": "myfengle",
+	"miniprogramRoot": "weapp/",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"libVersion": "2.14.0",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "pages/webview",
+					"pathName": "pages/webview",
+					"query": "id=37",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "pages/index",
+					"pathName": "pages/index",
+					"query": "id=19",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/search",
+					"pathName": "pages/search",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "pages/login",
+					"pathName": "pages/login",
+					"query": "id=19",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "pages/downloadImg",
+					"pathName": "pages/downloadImg",
+					"query": "url=https%3A%2F%2Fssish.oss-cn-hangzhou.aliyuncs.com%2FnewBee%2Fmyschool%2F1610007531911.png",
+					"scene": null
+				}
+			]
+		}
+	}
 }
