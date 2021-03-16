@@ -21,6 +21,39 @@ MyPlugin.install = function (wepy, options) {
         menus: ['shareAppMessage', 'shareTimeline']
       });
     },
+    onShow: function () {
+      // 此处都为神策埋点代码
+      var curPages = getCurrentPages();
+      if (curPages.length < 1) return;
+      const pages = [
+        'pages/index',
+        'pages/home',
+        'pages/detail',
+        'pages/search',
+        'pages/my',
+        'pages/mxtHome',
+        'pages/login',
+        'pages/webview',
+        'pages/downloadImg',
+        'pages/uploadImg'
+      ];
+      const pageNames = [
+        '课程列表',
+        '专属客服',
+        '课程详情页',
+        '课程搜索页',
+        '我的页面',
+        '首页',
+        '登录页面',
+        '',
+        '',
+        ''
+      ];
+      const pageIndex = pages.indexOf(curPages[curPages.length - 1].route);
+      getApp().sensors.registerApp({
+        $title: pageNames[pageIndex],
+      });
+    },
     data: {
       isIphoneX,
       statusBarHeight
