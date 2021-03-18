@@ -27,7 +27,7 @@
                 </swiper-item>
             </block>
         </swiper> -->
-        <menus @change="handleMenuChange" :list="menus"></menus>
+        <menus @change="handleMenuChange" :list="menus" class="index_menu"></menus>
         <courseList :list="courseList"></courseList>
         <div class="fixed_customer_ {{onScrolling ? 'slide_out_' : ''}}">
             <navigator url="home" open-type="navigate" hover-class="none">
@@ -83,6 +83,7 @@
             }
         }
     }
+   
     .fixed_customer_ {
         position: fixed;
         right: 18rpx;
@@ -109,25 +110,24 @@
         bottom:0;
         .fix_con{
             position:absolute;
-            top:50%;
-            transform:translateY(-50%);
             left:0;
             right:0;
+            top:40%;
             margin:0 auto;
             background-color:#fff;
-            box-shadow: 0px 12px 36px 17px rgba(220, 225, 235, 0.35);
-            border-radius:20rpx;
-            padding:40rpx 26px;
-            width:390rpx;
+            box-shadow: 0px 12rpx 36rpx 17rpx rgba(220, 225, 235, 0.35);
+            border-radius:40rpx;
+            padding:40rpx 40rpx;
+            width:360rpx;
             .li_item{
                color:#0E0E0E ;
                font-size:25rpx;
                background: #F6F6F6;
-               border-radius: 28px;
+               border-radius: 28rpx;
                display:block;
-               padding:8px 0;
+               padding:16rpx 0;
                text-align:center;
-               margin-bottom:14px;
+               margin-bottom:30rpx;
                &.on{
                 background: linear-gradient(185deg, #EAD19C, #E5C27C); 
                }
@@ -141,13 +141,13 @@
                 .btn{
                     display:inline-block;
                     background-color: #F6F6F6;
-                    height:32px;
-                    line-height:32px;
-                    border-radius:28px;
+                    height:62rpx;
+                    line-height:62rpx;
+                    border-radius:28rpx;
                     text-align:center;
                     color:#0E0E0E ;
                     font-size:25rpx;
-                    width:76px;
+                    width:162rpx;
                     text-align:center;
                     &:last-child{
                         background: linear-gradient(185deg, #EAD19C, #E5C27C); 
@@ -198,10 +198,12 @@ wepy.page({
         menus: [{
             name: '全部',
             value: ''
-        }, {
-            name: '一分钟快看',
-            value: 1
-        }, {
+        }, 
+        // {
+        //     name: '一分钟快看',
+        //     value: 1
+        // }, 
+        {
             name: '5分钟详解',
             value: 2
         }, {
@@ -314,14 +316,10 @@ wepy.page({
             })
             
             if(val.toString()=='2'){
-                if(val!=this.categoryValue){
-                    this.categoryItemList=JSON.parse(JSON.stringify(this.categoryItemList1))
-                }
+                this.categoryItemList=JSON.parse(JSON.stringify(this.categoryItemList1))
                 this.showCategoryItem=true
             }else if(val.toString()=='3'){
-                if(val!=this.categoryValue){
-                    this.categoryItemList=JSON.parse(JSON.stringify(this.categoryItemList2))
-                }
+                this.categoryItemList=JSON.parse(JSON.stringify(this.categoryItemList2))
                 this.showCategoryItem=true
             }
             this.categoryValue=val
@@ -365,6 +363,8 @@ wepy.page({
                     categoryItem:filter_value.join(',')
                 })
                 this.showCategoryItem=false
+            }else{
+                this.toast('请选择课程类型')
             }
         }
     }

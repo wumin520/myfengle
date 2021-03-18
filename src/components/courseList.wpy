@@ -2,7 +2,7 @@
     <ul class="course_list_ {{theme}}">
         <li v-for="item in list" @click="jumpTo(item)" class="item_">
             <div class="img_wrap_">
-                <image mode="heightFix" src="{{item.img}}"></image>
+                <image mode="heightFix" src="{{item.img?item.img:''}}"></image>
                 <label class="label_">{{item.courseType == 1?'视频' : '音频'}}</label>
             </div>
             <div class="right_wrap_">

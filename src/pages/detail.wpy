@@ -473,7 +473,7 @@
                 }
             } else {
                 return {
-                    title: decodeURI(this.title),
+                    title: this.title,
                     path: '',
                     imageUrl: this.imgUrl
                 }

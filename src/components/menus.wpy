@@ -1,6 +1,6 @@
 <template>
     <scroll-view scroll-x scroll-with-animation>
-        <ul class="menus_wrap_">
+        <ul class="menus_wrap_ ">
             <li @click="handleChange(item, index)" v-for="(item, index) in list" class="{{index + 1 == activeIndex ? 'item_ active_' : 'item_'}}">
                 {{item.name}}
             </li>
@@ -9,7 +9,8 @@
 </template>
 <style lang="less" scoped>
     .menus_wrap_ {
-        padding: 26rpx 60px 46rpx 28rpx;
+       //  padding: 26rpx 60px 46rpx 28rpx;
+        padding: 26rpx 0px 46rpx 0rpx;
         font-size: 28rpx;
         font-family: PingFang SC;
         font-weight: 400;
@@ -20,10 +21,12 @@
         white-space: nowrap;
         // overflow: scroll;
         .item_ {
-            margin-right: 36rpx;
+            margin-right: 0rpx;
             text-align: center;
+            flex:1;
+            display:inline-block;
             &:first-child {
-                margin-left: 6rpx;
+                // margin-left: 6rpx;
             }
         }
         .active_ {
