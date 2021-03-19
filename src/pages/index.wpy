@@ -8,7 +8,7 @@
             <block wx:for="{{banners}}" wx:key="index">
                 <swiper-item>
                     <navigator class="navigate_" url="detail?id={{item.courseId}}" open-type="navigate" hover-class="none">
-                        <image @click="trackEvent('学习', 'BANNER', item.pictureName)" class="img_" mode="heightFix" src="{{item.pictureUrl}}"></image>
+                        <image @click="trackEvent(['学习', 'BANNER', item.pictureName])" class="img_" mode="heightFix" src="{{item.pictureUrl}}"></image>
                     </navigator>
                 </swiper-item>
             </block>
