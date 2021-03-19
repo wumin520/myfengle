@@ -567,7 +567,7 @@
                 return api.finishViewVideo(params).then(res => res.data)
             },
             handleLike(item, index) {
-                this.trackEvent('课程', '讨论区', `讨论区`);
+                this.trackEvent(['课程', '讨论区', `讨论区`]);
                 if (item.liked) {
                     api.cancelLike({
                         cuswebuserid: this.userId,
@@ -642,7 +642,7 @@
                     this.cancelAttention()
                     return
                 }
-                this.trackEvent('课程', '关注', `${this.detailInfo.tutorName}`);
+                this.trackEvent(['课程', '关注', `${this.detailInfo.tutorName}`]);
                 api.attentionTeacher({
                     cuswebuserid: this.userId,
                     tutorId: this.detailInfo.tutorId
@@ -681,7 +681,7 @@
                     orderNumber: this.comments.length + 1,
                 };
                 this.addComment(params);
-                this.trackEvent('课程', '讨论区', `讨论区-${content}`);
+                this.trackEvent(['课程', '讨论区', `讨论区-${content}`]);
             },
             addComment(params, bol) {
                 api.addComment(params).then(res => res.data).then(data => {
@@ -694,7 +694,7 @@
             },
             playCourse(item) {
                 this.trackAutoEvent(item);
-                this.trackEvent('课程', '课程列表', `${this.detailInfo.title}-${item.videoName}`);
+                this.trackEvent(['课程', '课程列表', `${this.detailInfo.title}-${item.videoName}`]);
                 this.videoUrl = item.videoUrl;
                 this._videoId = item.id;
                 // 播放音频
@@ -809,7 +809,7 @@
             },
             jumpTo(url) {},
             handleMenuChange(val, index, item) {
-                this.trackEvent('课程', '标签栏', item.name);
+                this.trackEvent(['课程', '标签栏', item.name]);
                 this.type = val;
                 if (val == 3) {
                     this.queryCommentByCId(this.detailInfo.id)
