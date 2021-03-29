@@ -18,6 +18,8 @@
 </template>
 <style lang="less" scoped>
     .course_list_ {
+        padding-bottom: 20rpx;
+
         &.white {
             .item_ {
                 background: #fff;
