@@ -131,7 +131,7 @@ wepy.page({
 </script>
 <config>
 {
-  "navigationBarTitleText": "wepy",
+  "navigationBarTitleText": "课程搜索",
   "usingComponents": {
     topNavBar: '~@/components/topNavBar'
   }
